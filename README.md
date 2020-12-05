@@ -1,6 +1,33 @@
 # CrowsEnv
 
-Develop Enviroment of Nanozuki Crows
+Develop Enviroment of Nanozuki Crows. Managed by ansible.
+
+## before to use
+
+Before use these playbooks, should install ansible and fish.
+
+### arch
+
+```bash
+sudo pacman -S ansible fish
+chsh -s /bin/fish
+```
+
+### osx
+
+First, Install [homebrew](https://brew.sh/), and:
+
+```bash
+brew install fish ansible
+echo '/usr/local/bin/fish' | sudo tee -a /etc/shells
+chsh -s /usr/local/bin/fish
+```
+
+### ansible
+
+```bash
+ansible-galaxy install -r requirements.yml
+```
 
 ## bootstrap
 
