@@ -1,4 +1,5 @@
 ---
 - name: manage crows-env
+  hosts: localhost
   roles:
     - base

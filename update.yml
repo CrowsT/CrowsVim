@@ -1,0 +1,15 @@
+---
+- name: update environment
+  hosts: localhost
+  tasks:
+    - name: update vim plugins
+      ansible.builtin.shell: nvim +PlugUpgrade +PlugUpdate +qall
+    - name: update homebrew packages
+      community.general.homebrew:
+        update_homebrew: yes
+        upgrade_all: yes
+    - name: update homebrew cask packages
+      community.general.homebrew_cask:
+        upgrade_all: yes
+    - name: clean homebrew
+      ansible.builtin.shell: brew cleanup

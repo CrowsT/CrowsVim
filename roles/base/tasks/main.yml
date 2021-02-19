@@ -1,0 +1,15 @@
+---
+# tasks file for base
+#
+# Install basic packages for enviorment
+- name: install basic packages
+  community.general.homebrew:
+    state: latest
+    name:
+      - make
+      - go
+      - python
+      - node
+      - rustup
+      - tree
+      - direnv

@@ -1,0 +1,15 @@
+---
+- name: install neovim
+  community.general.homebrew:
+    state: latest
+    name:
+      - neovim
+      - ripgrep
+# nvim
+# echo "Linking nvim config..."
+# lndir $source_path/dots/common/nvim $target_path/.config/nvim
+# vim plugins
+# curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs \
+#       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+# nvim +PlugClean +PlugInstall +qall
+# nvim $source_path/refer/gotmp/main.go +GoInstallBinaries +3sleep +qall

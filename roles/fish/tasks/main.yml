@@ -1,0 +1,57 @@
+---
+# tasks file for fish
+# -- install fish
+- name: fish
+  community.general.homebrew:
+    name: fish
+    state: latest
+
+# -- fish config
+- name: link fish platform config
+  ansible.builtin.file:
+    src: ~/.local/share/CrowsEnv/dots/osx/fish/config.fish
+    dest: ~/.config/fish/config.fish
+    state: link
+
+# TODO: use loop
+- name: link fish others config
+  ansible.builtin.file:
+    src: ~/.local/share/CrowsEnv/dots/common/fish/before.init.fish
+    dest: ~/.config/fish/conf.d/before.init.fish
+    state: link
+
+# TODO: use loop
+- name: link fish function: gitget
+  ansible.builtin.file:
+    src: ~/.local/share/CrowsEnv/dots/common/fish/functions/gitget.fish
+    dest: ~/.config/fish/functions/gitget.fish
+    state: link
+
+# -- install oh-my-fish
+- name: link oh-my-fish config
+  ansible.builtin.file:
+    src: ~/.local/share/CrowsEnv/dots/common/omf
+    dest: ~/.config/omf
+    state: link
+
+- name: check if oh-my-fish installed
+  ansible.builtin.shell: fish -c "omf"
+  register: check-omf
+
+- name: create tempfile for install oh-my-fish
+  tempfile:
+    state: file
+    suffix: fish
+  when: check-omf.rc != 0
+  register: omf_install
+
+- name: download oh-my-fish installing script
+  ansible.builtin.shell: curl -L https://get.oh-my.fish > {{ omf_install.path }}
+  when: omf_install.path is defined
+
+- name: install oh-my-fish
+  ansible.builtin.shell: fish {{ omf_install.path }} --path=~/.local/share/omf --config=~/.config/omf
+  when: omf_install.path is defined
+
+- name: update oh-my-fish
+  ansible.builtin.shell: fish -c "omf update"

@@ -1,0 +1,14 @@
+---
+- name: install basic packages
+  community.general.homebrew:
+    state: latest
+    name:
+      - tmux
+#tmux plugins
+#git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
+#tmux
+#echo "Linking tmux config..."
+#ln -sf $source_path/dots/common/tmux/config $target_path/.config/tmux/tmux.conf
+#$target_path/.config/tmux/plugins/tpm/bin/install_plugins
+#$target_path/.config/tmux/plugins/tpm/bin/clean_plugins
+#$target_path/.config/tmux/plugins/tpm/bin/update_plugins all

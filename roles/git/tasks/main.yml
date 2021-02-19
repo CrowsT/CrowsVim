@@ -1,0 +1,34 @@
+---
+# task file for git
+- name: install git
+  community.general.homebrew:
+    state: latest
+    name: git
+- name: link git config
+  ansible.builtin.file:
+    src: ~/.local/share/CrowsEnv/dots/osx/fish/config.fish
+    dest: ~/.config/fish/config.fish
+    state: link
+- name: create local config
+  ansible.builtin.copy:
+    content: ""
+    dest: ~/.config/git/config_local
+    mode: 0644
+- name:
+
+#- copy:
+#    src: "{{ item }}"
+#    dest: /etc/fooapp/
+#    owner: root
+#    mode: 600
+#  with_fileglob:
+#    - /playbooks/files/fooapp/*
+#
+#git
+#echo "Linking global git config..."
+#ln -sf $source_path/dots/common/git/config $target_path/.config/git/config
+#
+#cp $config_path/git/* $target_path/.config/git
+#if [[ -f "$target_path/.config/git/config_local" ]]; then
+#    touch $target_path/.config/git/config_local
+#fi

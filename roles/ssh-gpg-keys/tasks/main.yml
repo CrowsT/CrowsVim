@@ -1,0 +1,28 @@
+---
+# task file for ssh & gpg keys
+- name: install basic packages
+  community.general.homebrew:
+    state: latest
+    name:
+      - gnupg
+      - pinentry-mac
+## gnupg sshconfig
+#md $target_path/.gnupg
+#gnupg-agent
+#ln -sf $source_path/dots/$platform/gnupg/gpg-agent.conf $target_path/.gnupg/gpg-agent.conf
+#
+## ssh
+#md $target_path/.ssh
+#cp $config_path/sshkeys/* $target_path/.ssh
+#
+## gpg keys
+#echo "Import gpg public keys..."
+#for file in `ls $config_path/gpgkeys/*_pub.gpg`; do
+#    gpg --import $file
+#done
+#echo "Import secret keys..."
+#for file in `ls $config_path/gpgkeys/*_sec.gpg`; do
+#    gpg --allow-secret-key-import --import $file
+#done
+## TODO
+# import ssh keys by ssh-add
