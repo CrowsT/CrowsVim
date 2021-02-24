@@ -1,0 +1,15 @@
+---
+- name: install basic packages
+  community.general.pacman:
+    state: latest
+    name:
+      - base-devel
+      - fcitx-rime
+      - direnv
+
+- import_role:
+  - kewlfft.aur
+# install yay
+- aur: name=yay state=present
+# upgrade all aur packages
+- aur: upgrade=yes use=yay

@@ -5,11 +5,39 @@
     name:
       - neovim
       - ripgrep
-# nvim
-# echo "Linking nvim config..."
-# lndir $source_path/dots/common/nvim $target_path/.config/nvim
-# vim plugins
-# curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs \
-#       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-# nvim +PlugClean +PlugInstall +qall
+      - python
+  when: ansible_facts['distribution'] == 'MacOSX'
+
+- name: install neovim python provider
+  ansible.builtin.pip:
+    name: pynvim
+    state: latest
+  when: ansible_facts['distribution'] == 'MacOSX'
+
+- name: install neovim
+  community.general.pacman:
+    state: latest
+    name:
+      - neovim
+      - ripgrep
+      - python-pynvim
+  when: ansible_facts['distribution'] == 'Archlinux'
+
+- name: link config
+  ansible.builtin.file:
+    src: "{{ repo_path }}/dotfiles/nvim"
+    dest: "{{ xdg.config }}/nvim"
+    state: link
+
+- name: install vim-plug
+  ansible.builtin.shell: "curl -fLo {{ xdg.config }}/nvim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
+  args:
+    creates: "{{ xdg.config }}/nvim/autoload/plug.vim"
+
+- name: vim-plug ensure plugins
+  ansible.builtin.shell: nvim +PlugClean! +PlugInstall +qall
+
+- name: vim-plug upgrade and update
+  ansible.builtin.shell: nvim +PlugUpgrade +PlugUpdate +qall
+
 # nvim $source_path/refer/gotmp/main.go +GoInstallBinaries +3sleep +qall

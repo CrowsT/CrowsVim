@@ -1,14 +1,30 @@
 ---
-- name: install basic packages
+- name: install
   community.general.homebrew:
     state: latest
-    name:
-      - tmux
-#tmux plugins
-#git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
-#tmux
-#echo "Linking tmux config..."
-#ln -sf $source_path/dots/common/tmux/config $target_path/.config/tmux/tmux.conf
-#$target_path/.config/tmux/plugins/tpm/bin/install_plugins
-#$target_path/.config/tmux/plugins/tpm/bin/clean_plugins
-#$target_path/.config/tmux/plugins/tpm/bin/update_plugins all
+    name: tmux
+  when: ansible_facts['distribution'] == 'MacOSX'
+
+- name: install
+  community.general.pacman:
+    state: latest
+    name: tmux
+  when: ansible_facts['distribution'] == 'Archlinux'
+
+- name: install tpm
+  ansible.builtin.git:
+    repo: https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
+    dest: "{{ xdg.config }}/tmux/plugins/tpm"
+    update: no
+
+- name: link config
+  ansible.builtin.file:
+    src: "{{ repo_path }}/dotfiles/tmux/config"
+    dest: "{{ xdg.config }}/tmux/tmux.conf"
+    state: link
+
+- name: ensure plugins
+  ansible.builtin.shell: |
+    "{{ xdg.config }}/tmux/plugins/tpm/bin/install_plugins"
+    "{{ xdg.config }}/tmux/plugins/tpm/bin/clean_plugins"
+    "{{ xdg.config }}/tmux/plugins/tpm/bin/update_plugins all"

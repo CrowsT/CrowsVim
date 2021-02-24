@@ -2,14 +2,12 @@
 # tasks file for base
 #
 # Install basic packages for enviorment
+# TODO: MacOSX: ensure xcode-select install
+# TODO: Archlinux: install yay
 - name: install basic packages
-  community.general.homebrew:
-    state: latest
-    name:
-      - make
-      - go
-      - python
-      - node
-      - rustup
-      - tree
-      - direnv
+  import_tasks: macosx.yml
+  when: ansible_facts['distribution'] == 'MacOSX'
+
+- name: install basic packages
+  import_tasks: arch.yml
+  when: ansible_facts['distribution'] == 'Archlinux'

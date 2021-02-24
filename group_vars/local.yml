@@ -1,0 +1,10 @@
+# global vars
+# TODO: try to use condition to fill vars.
+---
+username: crows
+xdg:
+  config: "{{ home }}/.config"
+  cache: "{{ home }}/.cache"
+  data: "{{ home }}/.local/share"
+project_path: "{{ home }}/Projects"
+repo_path: "{{ project_path }}/github.com/nanozuki/CrowsEnv"

@@ -1,20 +1,48 @@
 ---
 # task file for ssh & gpg keys
-- name: install basic packages
+- name: install
   community.general.homebrew:
     state: latest
     name:
       - gnupg
       - pinentry-mac
-## gnupg sshconfig
-#md $target_path/.gnupg
-#gnupg-agent
-#ln -sf $source_path/dots/$platform/gnupg/gpg-agent.conf $target_path/.gnupg/gpg-agent.conf
-#
-## ssh
-#md $target_path/.ssh
-#cp $config_path/sshkeys/* $target_path/.ssh
-#
+  when: ansible_facts['distribution'] == 'MacOSX'
+
+- name: install
+  community.general.pacman:
+    state: latest
+    name:
+      - gnupg
+      - pinentry
+  when: ansible_facts['distribution'] == 'Archlinux'
+
+- name: link agent config
+  ansible.builtin.file:
+    src: "{{ repo_path }}/dotfiles/gnupg/gpg-agent_macosx.conf"
+    dest: "{{ home }}/.gnupg/gpg-agent.conf"
+  when: ansible_facts['distribution'] == 'MacOSX'
+
+- name: link agent config
+  ansible.builtin.file:
+    src: "{{ repo_path }}/dotfiles/gnupg/gpg-agent_arch.conf"
+    dest: "{{ home }}/.gnupg/gpg-agent.conf" # TODO: ensure path
+  when: ansible_facts['distribution'] == 'Archlinux'
+
+- name: ssh directory
+  ansible.builtin.file:
+    path: "{{ home }}/.ssh"
+    state: directory
+    mode: 755
+
+- name: import ssh keys
+  ansible.builtin.copy:
+    remote_src: "{{ item }}"
+    dest: "{{ home }}/.ssh/{{ item | basename }}"
+    mode: 600
+    force: no
+  with_fileglob:
+    - "{{ repo_path }}/private/sshkeys/*"
+
 ## gpg keys
 #echo "Import gpg public keys..."
 #for file in `ls $config_path/gpgkeys/*_pub.gpg`; do
@@ -24,5 +52,5 @@
 #for file in `ls $config_path/gpgkeys/*_sec.gpg`; do
 #    gpg --allow-secret-key-import --import $file
 #done
-## TODO
+## TODO write to fish function
 # import ssh keys by ssh-add

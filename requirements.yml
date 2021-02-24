@@ -1,2 +1,5 @@
+---
+roles:
+  - name: kewlfft.aur
 collections:
-- name: community.general
+  - name: community.general

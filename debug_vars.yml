@@ -1,0 +1,7 @@
+---
+- name: "Ansible | List all known variables and facts"
+  hosts: archlinux
+  tasks:
+  - name: "Ansible | List all known variables and facts"
+    debug:
+      var: hostvars[inventory_hostname]

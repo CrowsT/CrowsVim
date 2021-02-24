@@ -2,33 +2,32 @@
 # task file for git
 - name: install git
   community.general.homebrew:
-    state: latest
     name: git
-- name: link git config
+    state: latest
+  when: ansible_facts['distribution'] == 'MacOSX'
+
+- name: install git
+  community.general.pacman:
+    name: git
+    state: latest
+  when: ansible_facts['distribution'] == 'Archlinux'
+
+- name: link main config
   ansible.builtin.file:
-    src: ~/.local/share/CrowsEnv/dots/osx/fish/config.fish
-    dest: ~/.config/fish/config.fish
+    src: "{{ repo_path }}/dotfiles/git/config"
+    dest: "{{ xdg.config }}/git/config"
     state: link
-- name: create local config
+
+- name: link private config
+  ansible.builtin.file:
+    src: "{{ item }}"
+    dest: "{{ xdg.config }}/git/{{ item | basename }}"
+    state: link
+  with_fileglob:
+    - "{{ repo_path }}/private/git/*"
+
+- name: ensure local entrance
   ansible.builtin.copy:
     content: ""
     dest: ~/.config/git/config_local
     mode: 0644
-- name:
-
-#- copy:
-#    src: "{{ item }}"
-#    dest: /etc/fooapp/
-#    owner: root
-#    mode: 600
-#  with_fileglob:
-#    - /playbooks/files/fooapp/*
-#
-#git
-#echo "Linking global git config..."
-#ln -sf $source_path/dots/common/git/config $target_path/.config/git/config
-#
-#cp $config_path/git/* $target_path/.config/git
-#if [[ -f "$target_path/.config/git/config_local" ]]; then
-#    touch $target_path/.config/git/config_local
-#fi

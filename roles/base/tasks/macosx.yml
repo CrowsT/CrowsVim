@@ -1,0 +1,9 @@
+---
+# TODO: ensure xcode-select
+- name: install basic packages
+  community.general.homebrew:
+    state: latest
+    name:
+      - make
+      - tree
+      - direnv
